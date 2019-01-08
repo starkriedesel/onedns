@@ -2,7 +2,7 @@ import time
 import threading
 
 import dnslib
-from dnslib import server
+from dnslib import server, DNSLabel
 
 from wrapt import synchronized
 
@@ -40,7 +40,7 @@ class DynamicResolver(server.BaseResolver):
         qtype = request.q.qtype
         try:
             if qtype in (dnslib.QTYPE.A, dnslib.QTYPE.AAAA):
-                forward = self.zone.get_forward(qname)
+                forward = self.zone.get_forward(DNSLabel(str(qname).lower()))
                 reply.add_answer(forward)
             elif qtype == dnslib.QTYPE.PTR:
                 reverse = self.zone.get_reverse(

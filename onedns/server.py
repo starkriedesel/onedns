@@ -34,13 +34,13 @@ class OneDNS(resolver.DynamicResolver):
         entries = {}
         hostname = self._sanitize_name(vm.name)
         primary_ip = vm.template.nics[0].ip
-        entries[hostname] = primary_ip
+        entries[hostname.lower()] = primary_ip
         for nic in vm.template.nics[1:]:
             nicname = self._sanitize_name("{hostname}-{id}".format(
                 id=nic.nic_id,
                 hostname=hostname
             ))
-            entries[nicname] = nic.ip
+            entries[nicname.lower()] = nic.ip
         return entries
 
     def _check_for_duplicates(self, vm_id, name, ip, zone=None):
